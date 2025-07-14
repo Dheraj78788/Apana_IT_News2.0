@@ -122,43 +122,42 @@
   <div class="categories" id="categoriesContainer"></div>
 
   <script>
-    const apiKey = "966f8d089b2b4232b03bbf661ca16965";
     const container = document.getElementById("categoriesContainer");
     const loader = document.getElementById("loader");
-
+  
     const categories = ["AI", "Gadgets", "Apps", "Startups"];
-
+  
     async function loadCategoryNews(category) {
-      const response = await fetch(`https://newsapi.org/v2/everything?q=${category}&pageSize=1&sortBy=publishedAt&apiKey=${apiKey}`);
+      const response = await fetch(`/api/news?q=${encodeURIComponent(category)}&pageSize=1`);
       const data = await response.json();
-      return data.articles[0];
+      return data.articles?.[0];
     }
-
+  
     async function showCategories() {
       loader.style.display = "block";
       for (let cat of categories) {
         const news = await loadCategoryNews(cat);
         const card = document.createElement("div");
         card.className = "category-card";
-
+  
         card.innerHTML = `
           <a href="category.html?name=${encodeURIComponent(cat)}" style="text-decoration: none; color: inherit;">
-          <h3>${cat}</h3>
-          ${news?.urlToImage ? `<img src="${news.urlToImage}" alt="${news.title}"/>` : ''}
-          <p><strong>${news?.title || "No news found"}</strong></p>
-          <p>${news?.description || "No description available."}</p>
-          <p style="color: #007bff;">Click to see all news →</p>
-        </a>
-      `;
-
-
+            <h3>${cat}</h3>
+            ${news?.urlToImage ? `<img src="${news.urlToImage}" alt="${news.title}"/>` : ''}
+            <p><strong>${news?.title || "No news found"}</strong></p>
+            <p>${news?.description || "No description available."}</p>
+            <p style="color: #007bff;">Click to see all news →</p>
+          </a>
+        `;
+  
         container.appendChild(card);
       }
       loader.style.display = "none";
     }
-
+  
     showCategories();
   </script>
+  
 </body>
 
 </html>
