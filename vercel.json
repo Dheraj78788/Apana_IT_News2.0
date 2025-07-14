@@ -1,12 +1,15 @@
 {
-    "version": 2,
-    "builds": [
-      { "src": "api/index.js", "use": "@vercel/node" }
-    ],
-    "routes": [
-      { "src": "/api/(.*)", "dest": "/api/index.js" },      // backend
-      { "handle": "filesystem" },                           // static files
-      { "src": "/(.*)", "dest": "/public/$1" }              // serve /public/*
-    ]
-  }
-  
+  "version": 2,
+  "name": "apana-it-news",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/api/news",      "destination": "/api/news.js" },
+    { "source": "/",              "destination": "/index.html" },
+    { "source": "/categories",    "destination": "/categories.html" },
+    { "source": "/category",      "destination": "/category.html" },
+    { "source": "/contact",       "destination": "/contact.html" },
+    { "source": "/about",         "destination": "/about.html" },
+    { "source": "/article",       "destination": "/article.html" }
+  ]
+}

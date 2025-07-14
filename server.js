@@ -1,47 +1,32 @@
-// server.js
+// server.js  (CommonJS style)
 const express = require("express");
-const cors = require("cors");
-const axios = require("axios");
-require("dotenv").config(); // Load .env variables
+const cors    = require("cors");
+const axios   = require("axios");
+require("dotenv").config();
 
-const app = express();
+const app  = express();
 const PORT = process.env.PORT || 3000;
-const NEWS_API_KEY = process.env.NEWS_KEY || "your_fallback_api_key_here"; // optional fallback
+const KEY  = process.env.NEWS_KEY;      // 966f8d089b2b4232b03bbf661ca16965
 
-// Middleware
 app.use(cors());
-app.use(express.json()); // for future POST/PUT support
-app.use(express.static("public")); // serve static files like favicon or index.html
 
-// ✅ API route: GET /news?q=ai
+// GET /news?q=ai
 app.get("/news", async (req, res) => {
-  const query = req.query.q || "technology";
-  const url = "https://newsapi.org/v2/everything";
-
+  const q = req.query.q || "technology";
   try {
-    const response = await axios.get(url, {
-      params: {
-        q: query,
-        apiKey: NEWS_API_KEY,
-        language: "en",
-        pageSize: 10, // limit results
-        sortBy: "publishedAt"
-      },
+    const { data } = await axios.get("https://newsapi.org/v2/everything", {
+      params: { q, apiKey: KEY }
     });
-
-    res.status(200).json(response.data);
-  } catch (error) {
-    console.error("🛑 News API Error:", error.message);
-    res.status(500).json({ error: "Failed to fetch news" });
+    res.json(data);
+  } catch (err) {
+    console.error("News API error:", err.message);
+    res.status(500).json({ error: "API error" });
   }
 });
 
-// ✅ Root route (health check)
-app.get("/", (_req, res) => {
-  res.send("🚀 Backend alive");
-});
+// optional root health‑check
+app.get("/", (_req, res) => res.send("🚀 Backend alive"));
 
-// ✅ Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server running at: http://localhost:${PORT}`);
-});
+app.listen(PORT, () =>
+  console.log(`🚀  Server running on http://localhost:${PORT}`)
+);
