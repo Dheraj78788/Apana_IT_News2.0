@@ -3,8 +3,9 @@ const newsContainer = document.getElementById("news-container");
 const loader = document.getElementById("loader");
 
 window.onload = () => {
-  fetchTechCrunchNews();
+  fetchLatestITNews();
 };
+
 
 function showLoader() {
   loader.style.display = "block";
@@ -13,16 +14,16 @@ function hideLoader() {
   loader.style.display = "none";
 }
 
-function fetchTechCrunchNews() {
+function fetchLatestITNews() {
   showLoader();
-  fetch(`https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=${apiKey}`)
+  fetch("/news?q=IT")  // You can also use 'technology' or 'information technology'
     .then(res => res.json())
     .then(data => {
       displayArticles(data.articles);
       hideLoader();
     })
     .catch(err => {
-      console.error(err);
+      console.error("Failed to fetch IT news:", err);
       hideLoader();
     });
 }
