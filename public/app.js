@@ -28,12 +28,12 @@ function fetchTechCrunchNews() {
 }
 
 function searchNews() {
-  const query = document.getElementById("search").value;
+  const query = document.getElementById("search").value.trim();
   if (!query) return;
 
   showLoader();
-  fetch(`/api/news?q=...`)
-  .then(res => res.json())
+  fetch(`/news?q=${encodeURIComponent(query)}`)
+    .then(res => res.json())
     .then(data => {
       displayArticles(data.articles);
       hideLoader();
