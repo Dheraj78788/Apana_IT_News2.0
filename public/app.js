@@ -16,7 +16,7 @@ function hideLoader() {
 
 function fetchLatestITNews() {
   showLoader();
-  fetch("/news?q=IT")  // You can also use 'technology' or 'information technology'
+  fetch(`https://newsapi.org/v2/everything?q=IT&apiKey=966f8d089b2b4232b03bbf661ca16965`)
     .then(res => res.json())
     .then(data => {
       displayArticles(data.articles);
